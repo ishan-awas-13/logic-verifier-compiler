@@ -1,0 +1,26 @@
+# Game Combat & Shield Simulation
+fixed word TITLE = "Space Arena";
+word player = "Aria";
+num level = 5;
+decimal health = 100.0;
+boolean hasShield = true;
+
+show("--- Welcome to: ---");
+show(TITLE);
+
+# Combat calculation
+num enemyDamage = 35;
+
+check (hasShield and health > 50.0) {
+    show("Shield absorbed the damage!");
+    health = health - 10.0;
+} otherwise {
+    show("Direct hit taken!");
+    health = health - enemyDamage;
+}
+
+show("Remaining Health:");
+show(health);
+
+give 0;
+

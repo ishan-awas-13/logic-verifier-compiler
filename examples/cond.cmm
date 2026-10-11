@@ -1,0 +1,6 @@
+num speed = 0;
+check (speed equals 0) {
+    show("landed");
+} otherwise {
+    show("flying");
+}

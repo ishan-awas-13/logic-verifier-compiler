@@ -1,0 +1,3 @@
+fixed num MAX = 10;
+MAX = 20;
+

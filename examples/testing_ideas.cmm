@@ -1,0 +1,6 @@
+num age = 0;
+letter gender = 'm';
+
+check((age > 18)and(gender equals 'm')){
+    show "Your'e a guy!";
+}

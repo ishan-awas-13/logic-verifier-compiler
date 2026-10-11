@@ -1,0 +1,11 @@
+build/
+bin/
+temp.out
+temp.err
+*.exe
+*.obj
+*.o
+*.a
+.vscode/
+.idea/
+.DS_Store

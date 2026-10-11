@@ -1,0 +1,12 @@
+# Grade Evaluation Matrix
+letter grade = 'B';
+num attendance = 90;
+boolean honors = false;
+
+check ((grade equals 'A' or grade equals 'B') and not (attendance < 75)) {
+    honors = true;
+    show("Awarding Honors Citation!");
+} otherwise {
+    show("Requirements not fulfilled.");
+}
+

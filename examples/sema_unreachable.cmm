@@ -1,0 +1,4 @@
+give 0;
+num dead_code = 10;
+show(dead_code);
+

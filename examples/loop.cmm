@@ -1,0 +1,5 @@
+num speed = 10;
+until (speed equals 0) {
+    show(speed);
+    speed--;
+}

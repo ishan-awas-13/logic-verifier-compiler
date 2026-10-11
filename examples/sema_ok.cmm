@@ -1,0 +1,31 @@
+# sema_ok.cmm: Comprehensive valid program
+fixed num MAX_COUNT = 100;
+num n = 42;
+decimal d = n;
+word w = input();
+letter ch = 'Z';
+boolean flag = true;
+list items;
+list other_items = items;
+items = other_items;
+
+check (flag and d > 10.0) {
+    num n = 10;
+    n++;
+    show(n);
+    show(ch);
+}
+
+until (n equals 0) {
+    n--;
+    check (n equals 5) {
+        skip;
+    }
+    check (n equals 1) {
+        stop;
+    }
+}
+
+show(w);
+show(MAX_COUNT);
+give 0;

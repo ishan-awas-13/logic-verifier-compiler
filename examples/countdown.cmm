@@ -1,0 +1,13 @@
+# Rocket Launch Loop
+num countdown = 5;
+fixed num LIFTOFF = 0;
+
+show("Initiating launch sequence...");
+
+until (countdown equals LIFTOFF) {
+    show(countdown);
+    countdown--;
+}
+
+show("Liftoff!");
+

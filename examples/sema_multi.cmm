@@ -1,0 +1,6 @@
+num a = "invalid";
+check (100) {
+    stop;
+}
+fixed num c;
+

@@ -1,0 +1,12 @@
+# Complex logic with and/or/not and character check
+
+letter grade = 'B';
+num attendance = 92;
+boolean isHonors = false;
+
+check ((grade equals 'A' or grade equals 'B') and not (attendance < 75)) {
+    isHonors = true;
+    show("Student qualified for honors award!");
+} otherwise {
+    show("Requirements not fulfilled.");
+}

@@ -1,0 +1,4 @@
+num x = 1 + 2 * 3 - (4 / 2);
+boolean valid = true and not false or false;
+decimal price = 19.99;
+letter grade = 'A';
