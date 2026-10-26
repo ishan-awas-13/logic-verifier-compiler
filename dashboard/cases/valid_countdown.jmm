@@ -1,0 +1,7 @@
+# Valid program: countdown loop
+num count = 5;
+until (count equals 0) {
+    show(count);
+    count--;
+}
+show(0);

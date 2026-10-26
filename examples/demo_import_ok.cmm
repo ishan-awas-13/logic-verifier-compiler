@@ -1,0 +1,29 @@
+import text;
+import math;
+
+# Demo: Successful import and use of text and math libraries
+word greeting = "C-- Compiler";
+num len = length(greeting);
+show("String length:");
+show(len);
+
+boolean empty = isempty(greeting);
+show("Is empty:");
+show(empty);
+
+num a = -42;
+num abs_val = absolute(a);
+show("Absolute value:");
+show(abs_val);
+
+num m1 = 15;
+num m2 = 99;
+num max_val = maximum(m1, m2);
+num min_val = minimum(m1, m2);
+show("Maximum:");
+show(max_val);
+show("Minimum:");
+show(min_val);
+
+give 0;
+

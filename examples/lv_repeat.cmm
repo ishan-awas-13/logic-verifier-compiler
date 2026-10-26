@@ -1,0 +1,7 @@
+num x = input();
+check (x > 10) {
+    check (x > 10) {
+        show("a");
+    }
+}
+

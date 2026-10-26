@@ -1,0 +1,6 @@
+# Valid program: uses imported libraries text and math
+import text;
+import math;
+word message = "Compiler";
+show(length(message));
+show(absolute(-99));

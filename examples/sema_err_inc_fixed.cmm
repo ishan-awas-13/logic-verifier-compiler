@@ -1,0 +1,3 @@
+fixed num f = 1;
+f++;
+

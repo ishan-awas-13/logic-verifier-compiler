@@ -1,0 +1,9 @@
+num a = 10;
+a++;
+a--;
+decimal d = 5.5;
+d++;
+d--;
+show(a);
+show(d);
+

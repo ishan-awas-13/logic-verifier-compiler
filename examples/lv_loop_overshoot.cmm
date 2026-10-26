@@ -1,0 +1,5 @@
+num x = 5;
+until (x equals 0) {
+    x = x - 2;
+}
+

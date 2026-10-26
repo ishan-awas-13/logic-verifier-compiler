@@ -1,0 +1,4 @@
+decimal d = 1.5 + 2.5;
+decimal e = d * 1.0;
+show(e);
+

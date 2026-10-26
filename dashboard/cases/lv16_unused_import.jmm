@@ -1,0 +1,4 @@
+# LV16: Unused import
+import math;
+num x = 42;
+show(x);

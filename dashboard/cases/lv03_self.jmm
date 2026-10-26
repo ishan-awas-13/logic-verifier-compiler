@@ -1,0 +1,5 @@
+# LV03: Self-comparison
+num x = input();
+check (x equals x) {
+    show(1);
+}

@@ -1,0 +1,9 @@
+num x = 0;
+until (false) {
+    x++;
+    check (x equals 5) {
+        stop;
+    }
+}
+show(x);
+

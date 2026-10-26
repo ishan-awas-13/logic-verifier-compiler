@@ -1,0 +1,4 @@
+num a = 7;
+decimal d = a;
+decimal e = a + 2.5;
+show(e);

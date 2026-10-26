@@ -1,0 +1,11 @@
+num x = 10;
+check (true) {
+    num x = 20;
+    show(x);
+}
+show(x);
+check (false) {
+    num x = 30;
+    show(x);
+}
+

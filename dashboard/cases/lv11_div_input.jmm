@@ -1,0 +1,4 @@
+# LV11: Possible division by zero on unvalidated input
+num divisor = input();
+num result = 100 / divisor;
+show(result);

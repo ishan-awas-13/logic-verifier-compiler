@@ -1,0 +1,12 @@
+num i = 0;
+until (i == 10) {
+    i = i + 1;
+    check (i == 5) {
+        skip;
+    }
+    check (i == 8) {
+        stop;
+    }
+    show(i);
+}
+

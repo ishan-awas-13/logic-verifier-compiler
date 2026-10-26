@@ -1,0 +1,5 @@
+# LV09: Code after an endless loop
+until (false) {
+    show(1);
+}
+show(999);

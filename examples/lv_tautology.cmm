@@ -1,0 +1,7 @@
+num x = input();
+check (x > 5 or x <= 5) {
+    show("a");
+} otherwise {
+    show("b");
+}
+

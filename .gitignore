@@ -9,3 +9,11 @@ temp.err
 .vscode/
 .idea/
 .DS_Store
+
+# Node / Dashboard artifacts
+node_modules/
+dist/
+dashboard/node_modules/
+dashboard/dist/
+*.log
+

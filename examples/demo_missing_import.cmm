@@ -1,0 +1,4 @@
+# Demo: Missing import error
+word message = "Hello without text import";
+show(message);
+

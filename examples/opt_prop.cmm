@@ -1,0 +1,5 @@
+num a = 5;
+num b = a + 1;
+num c = b * 2;
+show(c);
+

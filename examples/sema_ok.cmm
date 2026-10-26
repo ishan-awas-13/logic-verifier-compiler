@@ -1,3 +1,6 @@
+import text;
+import vector;
+
 # sema_ok.cmm: Comprehensive valid program
 fixed num MAX_COUNT = 100;
 num n = 42;

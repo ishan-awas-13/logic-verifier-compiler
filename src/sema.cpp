@@ -2,7 +2,7 @@
 
 namespace cmm {
 
-SemanticAnalyzer::SemanticAnalyzer() {}
+SemanticAnalyzer::SemanticAnalyzer(const LibraryRegistry& registry) : registry_(registry) {}
 
 bool SemanticAnalyzer::analyze(const Program& program) {
     check_block_statements(program.statements);
@@ -51,6 +51,11 @@ void SemanticAnalyzer::visit_var_decl(const VarDecl& stmt) {
         return;
     }
 
+    if (decl_type == Type::Word || decl_type == Type::List) {
+        std::string prov = registry_.providerOfType(decl_type);
+        lib_uses_.push_back(LibUse{stmt.type_name, LibUseKind::Type, prov, stmt.line, stmt.col});
+    }
+
     bool success = symbols_.declare(stmt.name, decl_type, stmt.is_fixed, stmt.line, stmt.col);
     if (!success) {
         error(stmt.line, stmt.col, "redeclaration of variable '" + stmt.name + "' in the same scope");
@@ -63,7 +68,7 @@ void SemanticAnalyzer::visit_var_decl(const VarDecl& stmt) {
     if (stmt.initializer) {
         if (dynamic_cast<const InputExpr*>(stmt.initializer.get())) {
             if (decl_type == Type::List) {
-                error(stmt.line, stmt.col, "cannot assign input() to list");
+                error(stmt.initializer->line, stmt.initializer->col, "cannot assign input() to list");
             }
             input_allowed_ = true;
             input_target_type_ = decl_type;
@@ -73,7 +78,7 @@ void SemanticAnalyzer::visit_var_decl(const VarDecl& stmt) {
             stmt.initializer->accept(*this);
             Type init_type = stmt.initializer->type;
             if (init_type != Type::Error && !is_assignable(decl_type, init_type)) {
-                error(stmt.line, stmt.col, "type mismatch: cannot assign " + to_string(init_type) + " to variable '" + stmt.name + "' of type " + to_string(decl_type));
+                error(stmt.initializer->line, stmt.initializer->col, "type mismatch: cannot assign " + to_string(init_type) + " to variable '" + stmt.name + "' of type " + to_string(decl_type));
             }
         }
     }
@@ -105,7 +110,7 @@ void SemanticAnalyzer::visit_assign(const AssignStmt& stmt) {
 
     if (dynamic_cast<const InputExpr*>(stmt.value.get())) {
         if (sym->type == Type::List) {
-            error(stmt.line, stmt.col, "cannot assign input() to list");
+            error(stmt.value->line, stmt.value->col, "cannot assign input() to list");
         }
         input_allowed_ = true;
         input_target_type_ = sym->type;
@@ -115,16 +120,22 @@ void SemanticAnalyzer::visit_assign(const AssignStmt& stmt) {
         stmt.value->accept(*this);
         Type val_type = stmt.value->type;
         if (val_type != Type::Error && !is_assignable(sym->type, val_type)) {
-            error(stmt.line, stmt.col, "type mismatch: cannot assign " + to_string(val_type) + " to variable '" + stmt.name + "' of type " + to_string(sym->type));
+            error(stmt.value->line, stmt.value->col, "type mismatch: cannot assign " + to_string(val_type) + " to variable '" + stmt.name + "' of type " + to_string(sym->type));
         }
     }
 }
 
 void SemanticAnalyzer::visit_emit(const EmitStmt& stmt) {
+    bool prev_direct = direct_show_arg_;
+    if (stmt.expr && dynamic_cast<const StringLiteral*>(stmt.expr.get())) {
+        direct_show_arg_ = true;
+    }
     stmt.expr->accept(*this);
+    direct_show_arg_ = prev_direct;
+
     if (stmt.expr->type != Type::Error) {
         if (stmt.expr->type == Type::List || stmt.expr->type == Type::Void) {
-            error(stmt.line, stmt.col, "cannot show value of type " + to_string(stmt.expr->type));
+            error(stmt.expr->line, stmt.expr->col, "cannot show value of type " + to_string(stmt.expr->type));
         }
     }
 }
@@ -132,7 +143,7 @@ void SemanticAnalyzer::visit_emit(const EmitStmt& stmt) {
 void SemanticAnalyzer::visit_if(const IfStmt& stmt) {
     stmt.condition->accept(*this);
     if (stmt.condition->type != Type::Error && stmt.condition->type != Type::Boolean) {
-        error(stmt.line, stmt.col, "condition must be boolean, found " + to_string(stmt.condition->type));
+        error(stmt.condition->line, stmt.condition->col, "condition must be boolean, found " + to_string(stmt.condition->type));
     }
     if (stmt.then_branch) stmt.then_branch->accept(*this);
     if (stmt.else_branch) stmt.else_branch->accept(*this);
@@ -141,7 +152,7 @@ void SemanticAnalyzer::visit_if(const IfStmt& stmt) {
 void SemanticAnalyzer::visit_while(const WhileStmt& stmt) {
     stmt.condition->accept(*this);
     if (stmt.condition->type != Type::Error && stmt.condition->type != Type::Boolean) {
-        error(stmt.line, stmt.col, "condition must be boolean, found " + to_string(stmt.condition->type));
+        error(stmt.condition->line, stmt.condition->col, "condition must be boolean, found " + to_string(stmt.condition->type));
     }
     loop_depth_++;
     if (stmt.body) stmt.body->accept(*this);
@@ -160,7 +171,7 @@ void SemanticAnalyzer::visit_give(const GiveStmt& stmt) {
     } else {
         stmt.value->accept(*this);
         if (stmt.value->type != Type::Error && stmt.value->type != Type::Num) {
-            error(stmt.line, stmt.col, "'give' statement requires num exit code, found " + to_string(stmt.value->type));
+            error(stmt.value->line, stmt.value->col, "'give' statement requires num exit code, found " + to_string(stmt.value->type));
         }
     }
 }
@@ -185,6 +196,10 @@ void SemanticAnalyzer::visit_number(const NumberLiteral& expr) {
 void SemanticAnalyzer::visit_string(const StringLiteral& expr) {
     expr.type = Type::Word;
     expr.is_const = true;
+    if (!direct_show_arg_) {
+        std::string prov = registry_.providerOfType(Type::Word);
+        lib_uses_.push_back(LibUse{"word", LibUseKind::Type, prov, expr.line, expr.col});
+    }
 }
 
 void SemanticAnalyzer::visit_char(const CharLiteral& expr) {
@@ -219,20 +234,20 @@ void SemanticAnalyzer::visit_unary(const UnaryExpr& expr) {
 
     if (expr.op.type == TokenType::Not) {
         if (rt != Type::Boolean) {
-            error(expr.line, expr.col, "operator 'not' requires boolean operand, found " + to_string(rt));
+            error(expr.op.line, expr.op.col, "operator 'not' requires boolean operand, found " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
         expr.type = Type::Boolean;
     } else if (expr.op.type == TokenType::Minus) {
         if (!is_numeric(rt)) {
-            error(expr.line, expr.col, "unary '-' requires numeric operand, found " + to_string(rt));
+            error(expr.op.line, expr.op.col, "unary '-' requires numeric operand, found " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
         expr.type = rt;
     } else {
-        error(expr.line, expr.col, "unexpected unary operator '" + std::string(expr.op.lexeme) + "'");
+        error(expr.op.line, expr.op.col, "unexpected unary operator '" + std::string(expr.op.lexeme) + "'");
         expr.type = Type::Error;
     }
 }
@@ -255,7 +270,7 @@ void SemanticAnalyzer::visit_binary(const BinaryExpr& expr) {
     if (expr.op.type == TokenType::Plus || expr.op.type == TokenType::Minus ||
         expr.op.type == TokenType::Star || expr.op.type == TokenType::Slash) {
         if (!is_numeric(lt) || !is_numeric(rt)) {
-            error(expr.line, expr.col, "operator '" + op_lexeme + "' requires numeric operands, found " + to_string(lt) + " and " + to_string(rt));
+            error(expr.op.line, expr.op.col, "operator '" + op_lexeme + "' requires numeric operands, found " + to_string(lt) + " and " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
@@ -270,7 +285,7 @@ void SemanticAnalyzer::visit_binary(const BinaryExpr& expr) {
     // Modulus: %
     if (expr.op.type == TokenType::Percent) {
         if (lt != Type::Num || rt != Type::Num) {
-            error(expr.line, expr.col, "operator '%' requires num operands, found " + to_string(lt) + " and " + to_string(rt));
+            error(expr.op.line, expr.op.col, "operator '%' requires num operands, found " + to_string(lt) + " and " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
@@ -282,7 +297,7 @@ void SemanticAnalyzer::visit_binary(const BinaryExpr& expr) {
     if (expr.op.type == TokenType::Less || expr.op.type == TokenType::Greater ||
         expr.op.type == TokenType::LessEqual || expr.op.type == TokenType::GreaterEqual) {
         if (!is_numeric(lt) || !is_numeric(rt)) {
-            error(expr.line, expr.col, "comparison operator '" + op_lexeme + "' requires numeric operands, found " + to_string(lt) + " and " + to_string(rt));
+            error(expr.op.line, expr.op.col, "comparison operator '" + op_lexeme + "' requires numeric operands, found " + to_string(lt) + " and " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
@@ -293,13 +308,13 @@ void SemanticAnalyzer::visit_binary(const BinaryExpr& expr) {
     // Equality: equals / ==, notequals / !=
     if (expr.op.type == TokenType::Equals || expr.op.type == TokenType::Notequals) {
         if (lt == Type::List || rt == Type::List) {
-            error(expr.line, expr.col, "cannot compare lists");
+            error(expr.op.line, expr.op.col, "cannot compare lists");
             expr.type = Type::Error;
             return;
         }
         bool compatible = (lt == rt) || (is_numeric(lt) && is_numeric(rt));
         if (!compatible) {
-            error(expr.line, expr.col, "cannot compare incompatible types " + to_string(lt) + " and " + to_string(rt));
+            error(expr.op.line, expr.op.col, "cannot compare incompatible types " + to_string(lt) + " and " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
@@ -310,7 +325,7 @@ void SemanticAnalyzer::visit_binary(const BinaryExpr& expr) {
     // Logical: and, or
     if (expr.op.type == TokenType::And || expr.op.type == TokenType::Or) {
         if (lt != Type::Boolean || rt != Type::Boolean) {
-            error(expr.line, expr.col, "logical operator '" + op_lexeme + "' requires boolean operands, found " + to_string(lt) + " and " + to_string(rt));
+            error(expr.op.line, expr.op.col, "logical operator '" + op_lexeme + "' requires boolean operands, found " + to_string(lt) + " and " + to_string(rt));
             expr.type = Type::Error;
             return;
         }
@@ -318,7 +333,7 @@ void SemanticAnalyzer::visit_binary(const BinaryExpr& expr) {
         return;
     }
 
-    error(expr.line, expr.col, "unsupported binary operator '" + op_lexeme + "'");
+    error(expr.op.line, expr.op.col, "unsupported binary operator '" + op_lexeme + "'");
     expr.type = Type::Error;
 }
 
@@ -334,6 +349,42 @@ void SemanticAnalyzer::visit_input(const InputExpr& expr) {
         expr.type = Type::Error;
     } else {
         expr.type = input_target_type_;
+    }
+}
+
+void SemanticAnalyzer::visit_call(const CallExpr& expr) {
+    for (const auto& arg : expr.args) {
+        arg->accept(*this);
+    }
+
+    const FunctionDef* fn = registry_.findFunction(expr.callee);
+    if (!fn) {
+        // Unknown function name: record with empty provider, set Type::Error, no sema error diagnostic
+        lib_uses_.push_back(LibUse{expr.callee, LibUseKind::Function, "", expr.line, expr.col});
+        expr.type = Type::Error;
+        return;
+    }
+
+    std::string prov = registry_.providerOfFunction(expr.callee);
+    lib_uses_.push_back(LibUse{expr.callee, LibUseKind::Function, prov, expr.line, expr.col});
+    expr.type = fn->return_type;
+
+    if (expr.args.size() != fn->param_types.size()) {
+        error(expr.line, expr.col, expr.callee + " expects " + std::to_string(fn->param_types.size()) +
+                                      " argument(s), found " + std::to_string(expr.args.size()));
+        expr.type = Type::Error;
+        return;
+    }
+
+    for (size_t i = 0; i < expr.args.size(); ++i) {
+        Type expected = fn->param_types[i];
+        Type actual = expr.args[i]->type;
+        if (actual != Type::Error && !is_assignable(expected, actual)) {
+            error(expr.args[i]->line, expr.args[i]->col,
+                  "type mismatch in call to '" + expr.callee + "': expected " + to_string(expected) +
+                      ", found " + to_string(actual));
+            expr.type = Type::Error;
+        }
     }
 }
 

@@ -1,0 +1,6 @@
+import vector;
+
+list a;
+list b;
+boolean c = a equals b;
+

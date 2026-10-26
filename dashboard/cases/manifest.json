@@ -1,0 +1,264 @@
+[
+  {
+    "id": "err_missing_brace",
+    "category": "Earlier Phases",
+    "title": "Syntax Error: Missing Brace",
+    "code": "SYNTAX",
+    "description": "Program contains an unclosed block brace. The parser rejects the malformed syntax before semantic analysis.",
+    "file": "cases/err_missing_brace.jmm",
+    "expectedCodes": [],
+    "expectedExit": 1
+  },
+  {
+    "id": "sema_undeclared",
+    "category": "Earlier Phases",
+    "title": "Undeclared Variable",
+    "code": "SEMA",
+    "description": "Variable 'y' is referenced before declaration. The semantic analyzer stops execution and reports the missing symbol.",
+    "file": "cases/sema_undeclared.jmm",
+    "expectedCodes": [],
+    "expectedExit": 1
+  },
+  {
+    "id": "sema_type_mismatch",
+    "category": "Earlier Phases",
+    "title": "Type Mismatch Assignment",
+    "code": "SEMA",
+    "description": "Attempting to assign a 'word' string literal to a 'num' integer variable. Semantic analyzer enforces static type safety.",
+    "file": "cases/sema_type_mismatch.jmm",
+    "expectedCodes": [],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv01_contradiction",
+    "category": "Logic Flaws",
+    "title": "LV01: Always-False Condition",
+    "code": "LV01",
+    "description": "Condition 'x > 10 and x < 5' is contradictory and can never evaluate to true. The branch body will never execute.",
+    "file": "cases/lv01_contradiction.jmm",
+    "expectedCodes": ["LV01"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv02_tautology",
+    "category": "Logic Flaws",
+    "title": "LV02: Always-True Condition",
+    "code": "LV02",
+    "description": "Condition 'x equals 5' is always true based on constant propagation. The otherwise branch is dead code.",
+    "file": "cases/lv02_tautology.jmm",
+    "expectedCodes": ["LV02"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv03_self",
+    "category": "Logic Flaws",
+    "title": "LV03: Self-Comparison",
+    "code": "LV03",
+    "description": "Comparing variable 'x' directly to itself is tautological and indicates redundant or confused logic.",
+    "file": "cases/lv03_self.jmm",
+    "expectedCodes": ["LV03"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv04_redundant",
+    "category": "Logic Flaws",
+    "title": "LV04: Redundant Condition Part",
+    "code": "LV04",
+    "description": "In 'x > 10 and x > 5', the condition 'x > 5' is subsumed by 'x > 10', making one conjunct completely redundant.",
+    "file": "cases/lv04_redundant.jmm",
+    "expectedCodes": ["LV04"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv05_loop_never_runs",
+    "category": "Logic Flaws",
+    "title": "LV05: Loop Body Never Runs",
+    "code": "LV05",
+    "description": "The loop condition is already true on entry ('i equals 10' where i=10). Because 'until' loops stop when true, the body never runs.",
+    "file": "cases/lv05_loop_never_runs.jmm",
+    "expectedCodes": ["LV05"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv06_loop_const",
+    "category": "Logic Flaws",
+    "title": "LV06: Loop Never Terminates",
+    "code": "LV06",
+    "description": "The loop exit condition is constant false and contains no internal stop statement, causing an infinite loop.",
+    "file": "cases/lv06_loop_const.jmm",
+    "expectedCodes": ["LV06"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv07_loop_overshoot",
+    "category": "Logic Flaws",
+    "title": "LV07: Step Skips Loop Exit",
+    "code": "LV07",
+    "description": "Counter starts at 0, steps by +2, but exit test checks for exact equality 'i equals 5'. The counter skips the exit value.",
+    "file": "cases/lv07_loop_overshoot.jmm",
+    "expectedCodes": ["LV07"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv08_loop_direction",
+    "category": "Logic Flaws",
+    "title": "LV08: Loop Moves Wrong Direction",
+    "code": "LV08",
+    "description": "Loop condition waits for 'x equals 10' starting from 1, but the step decrements 'x--', moving strictly away from the target.",
+    "file": "cases/lv08_loop_direction.jmm",
+    "expectedCodes": ["LV08"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv09_after_loop",
+    "category": "Logic Flaws",
+    "title": "LV09: Code After Endless Loop",
+    "code": "LV09",
+    "description": "Statements located immediately following a non-terminating loop can never be reached during execution.",
+    "file": "cases/lv09_after_loop.jmm",
+    "expectedCodes": ["LV06", "LV09"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv10_div_zero",
+    "category": "Logic Flaws",
+    "title": "LV10: Definite Division by Zero",
+    "code": "LV10",
+    "description": "Divisor is statically proven to be constant zero. The program is guaranteed to trigger a runtime trap.",
+    "file": "cases/lv10_div_zero.jmm",
+    "expectedCodes": ["LV10"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv11_div_input",
+    "category": "Logic Flaws",
+    "title": "LV11: Division by Unchecked Input",
+    "code": "LV11",
+    "description": "A variable read directly from user input is used as a divisor without any non-zero validation guard.",
+    "file": "cases/lv11_div_input.jmm",
+    "expectedCodes": ["LV11"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv_div_guarded",
+    "category": "Logic Flaws",
+    "title": "No False Alarm: Guarded Division",
+    "code": "SAFE",
+    "description": "Input divisor is guarded by 'check (n > 0)' before division. The verifier proves the division is safe and emits no warnings.",
+    "file": "cases/lv_div_guarded.jmm",
+    "expectedCodes": [],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv_loop_stop_ok",
+    "category": "Logic Flaws",
+    "title": "No False Alarm: Loop with Stop",
+    "code": "SAFE",
+    "description": "Loop has condition 'until (false)' but contains a reachable 'stop' statement inside a branch. Verifier correctly allows it.",
+    "file": "cases/lv_loop_stop_ok.jmm",
+    "expectedCodes": [],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv12_missing_word",
+    "category": "Load and Link",
+    "title": "LV12: Missing Import (Type)",
+    "code": "LV12",
+    "description": "Program uses built-in type 'word' without importing library 'text'. The linker flags the missing module declaration.",
+    "file": "cases/lv12_missing_word.jmm",
+    "expectedCodes": ["LV12"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv12_missing_func",
+    "category": "Load and Link",
+    "title": "LV12: Missing Import (Function)",
+    "code": "LV12",
+    "description": "Program calls library function 'maximum' without importing library 'math'.",
+    "file": "cases/lv12_missing_func.jmm",
+    "expectedCodes": ["LV12"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv13_unknown_lib",
+    "category": "Load and Link",
+    "title": "LV13: Unknown Library",
+    "code": "LV13",
+    "description": "Program imports library 'banana' which does not exist in the compiler library registry.",
+    "file": "cases/lv13_unknown_lib.jmm",
+    "expectedCodes": ["LV13"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv14_undefined_func",
+    "category": "Load and Link",
+    "title": "LV14: Undefined Function Call",
+    "code": "LV14",
+    "description": "Function 'lengt' is called on imported library 'text'. The linker identifies the typo and suggests 'length'.",
+    "file": "cases/lv14_undefined_func.jmm",
+    "expectedCodes": ["LV14"],
+    "expectedExit": 1
+  },
+  {
+    "id": "lv15_duplicate_import",
+    "category": "Load and Link",
+    "title": "LV15: Duplicate Import",
+    "code": "LV15",
+    "description": "Library 'text' is imported multiple times. The linker warns about redundant imports.",
+    "file": "cases/lv15_duplicate_import.jmm",
+    "expectedCodes": ["LV15"],
+    "expectedExit": 0
+  },
+  {
+    "id": "lv16_unused_import",
+    "category": "Load and Link",
+    "title": "LV16: Unused Import",
+    "code": "LV16",
+    "description": "Library 'math' is imported but none of its types or functions are ever referenced.",
+    "file": "cases/lv16_unused_import.jmm",
+    "expectedCodes": ["LV16"],
+    "expectedExit": 0
+  },
+  {
+    "id": "link_blocks_logic",
+    "category": "Load and Link",
+    "title": "Link Error Blocks Logic Checks",
+    "code": "LV12",
+    "description": "Program has both an unimported type (LV12) and a division by zero (LV10). Link error stops the pipeline before intermediate code.",
+    "file": "cases/link_blocks_logic.jmm",
+    "expectedCodes": ["LV12"],
+    "expectedExit": 1
+  },
+  {
+    "id": "valid_countdown",
+    "category": "Valid Programs",
+    "title": "Countdown Loop",
+    "code": "VALID",
+    "description": "Clean loop counting down from 5 to 0. Passes all compiler stages and prints countdown values.",
+    "file": "cases/valid_countdown.jmm",
+    "expectedCodes": [],
+    "expectedExit": 0
+  },
+  {
+    "id": "valid_import_text",
+    "category": "Valid Programs",
+    "title": "Standard Library Usage",
+    "code": "VALID",
+    "description": "Imports 'text' and 'math' libraries, manipulates strings and numbers, and prints results with zero warnings.",
+    "file": "cases/valid_import_text.jmm",
+    "expectedCodes": [],
+    "expectedExit": 0
+  },
+  {
+    "id": "valid_input",
+    "category": "Valid Programs",
+    "title": "Safe User Input Processing",
+    "code": "VALID",
+    "description": "Reads input using input(), validates condition with check/otherwise, and executes safely.",
+    "file": "cases/valid_input.jmm",
+    "expectedCodes": [],
+    "expectedExit": 0,
+    "inputs": "42\n3.14\ntrue\nZ\nhello"
+  }
+]
+

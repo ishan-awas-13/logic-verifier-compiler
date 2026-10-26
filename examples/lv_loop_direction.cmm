@@ -1,0 +1,5 @@
+num x = 1;
+until (x equals 10) {
+    x--;
+}
+

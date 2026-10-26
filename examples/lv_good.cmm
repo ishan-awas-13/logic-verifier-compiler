@@ -1,0 +1,9 @@
+num x = input();
+num y = 20;
+num sum = x + y;
+check (sum > 25) {
+    show("greater");
+} otherwise {
+    show("smaller");
+}
+

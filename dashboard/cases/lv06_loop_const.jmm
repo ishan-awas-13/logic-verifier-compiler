@@ -1,0 +1,4 @@
+# LV06: Loop never terminates
+until (false) {
+    show(1);
+}

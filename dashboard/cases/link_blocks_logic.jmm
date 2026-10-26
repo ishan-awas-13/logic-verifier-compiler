@@ -1,0 +1,4 @@
+# Link error blocks logic verifier from running
+word w = "unimported";
+num z = 10 / 0;
+show(z);

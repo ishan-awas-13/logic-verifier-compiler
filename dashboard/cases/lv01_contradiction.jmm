@@ -1,0 +1,5 @@
+# LV01: Always-false condition (contradiction)
+num x = input();
+check (x > 10 and x < 5) {
+    show(1);
+}

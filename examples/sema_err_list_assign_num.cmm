@@ -1,0 +1,5 @@
+import vector;
+
+list l;
+l = 5;
+

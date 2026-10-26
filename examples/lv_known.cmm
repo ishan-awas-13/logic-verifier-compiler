@@ -1,0 +1,9 @@
+fixed num MAX = 10;
+check (MAX > 20) {
+    show("a");
+}
+boolean f = true;
+check (not f) {
+    show("b");
+}
+

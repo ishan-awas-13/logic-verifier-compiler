@@ -1,0 +1,6 @@
+import text;
+import text;
+
+word s = "hello";
+show(s);
+

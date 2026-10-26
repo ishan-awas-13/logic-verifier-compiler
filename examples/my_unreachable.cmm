@@ -1,0 +1,7 @@
+num i = 0;
+until (i equals 3) {
+    stop;
+    show(i);
+}
+give 0;
+show("dead");

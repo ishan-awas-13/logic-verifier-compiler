@@ -19,6 +19,7 @@ class UnaryExpr;
 class BinaryExpr;
 class GroupingExpr;
 class InputExpr;
+class CallExpr;
 
 class ExprVisitor {
 public:
@@ -32,6 +33,7 @@ public:
     virtual void visit_binary(const BinaryExpr& expr) = 0;
     virtual void visit_grouping(const GroupingExpr& expr) = 0;
     virtual void visit_input(const InputExpr& expr) = 0;
+    virtual void visit_call(const CallExpr& expr) = 0;
 };
 
 class Expr {
@@ -114,6 +116,16 @@ class InputExpr : public Expr {
 public:
     InputExpr(int line, int col) : Expr(line, col) {}
     void accept(ExprVisitor& visitor) const override { visitor.visit_input(*this); }
+};
+
+class CallExpr : public Expr {
+public:
+    std::string callee;
+    std::vector<std::unique_ptr<Expr>> args;
+
+    CallExpr(int line, int col, std::string callee, std::vector<std::unique_ptr<Expr>> args)
+        : Expr(line, col), callee(std::move(callee)), args(std::move(args)) {}
+    void accept(ExprVisitor& visitor) const override { visitor.visit_call(*this); }
 };
 
 class VarDecl;
@@ -234,7 +246,14 @@ public:
     void accept(StmtVisitor& visitor) const override { visitor.visit_skip(*this); }
 };
 
+struct Import {
+    std::string name;
+    int line;
+    int col;
+};
+
 struct Program {
+    std::vector<Import> imports;
     std::vector<std::unique_ptr<Stmt>> statements;
 };
 

@@ -14,6 +14,15 @@ add_library(cmm_lib
     src/ast_printer.cpp
     src/symbol_table.cpp
     src/sema.cpp
+    src/library_registry.cpp
+    src/link_check.cpp
+    src/tac.cpp
+    src/tac_gen.cpp
+    src/cfg.cpp
+    src/interval.cpp
+    src/verifier.cpp
+    src/tac_interp.cpp
+    src/optimizer.cpp
 )
 target_include_directories(cmm_lib PUBLIC src)
 

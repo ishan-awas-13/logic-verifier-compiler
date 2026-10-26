@@ -1,0 +1,11 @@
+num a = input();
+check (a > 10) {
+    check (a > 20) {
+        show("huge");
+    } otherwise {
+        show("big");
+    }
+} otherwise {
+    show("small");
+}
+

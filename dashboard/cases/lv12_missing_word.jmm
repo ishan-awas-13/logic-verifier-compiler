@@ -1,0 +1,3 @@
+# LV12: Missing import for type 'word'
+word name = "tester";
+show(name);

@@ -1,0 +1,3 @@
+# Semantic error: undeclared variable
+num x = y + 1;
+show(x);

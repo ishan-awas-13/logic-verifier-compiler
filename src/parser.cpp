@@ -7,10 +7,47 @@ Parser::Parser(const std::vector<Token>& tokens) : tokens_(tokens) {}
 
 Program Parser::parse() {
     Program program;
+    bool has_statement = false;
     while (!is_at_end()) {
         skip_newlines();
         if (is_at_end()) break;
+
+        if (check(TokenType::Import)) {
+            Token import_tok = advance();
+            if (has_statement) {
+                error(import_tok, "imports must appear at the top of the program");
+                while (!is_at_end() && peek().type != TokenType::Semicolon && peek().type != TokenType::Newline) {
+                    advance();
+                }
+                if (match(TokenType::Semicolon) || match(TokenType::Newline)) {}
+                continue;
+            }
+
+            if (check(TokenType::Semicolon)) {
+                error(peek(), "expected a library name after 'import'");
+                advance();
+                continue;
+            }
+
+            if (match(TokenType::Identifier)) {
+                Token name_tok = previous();
+                if (!match(TokenType::Semicolon)) {
+                    error(peek(), "Expected ';' after import.");
+                } else {
+                    program.imports.push_back(Import{std::string(name_tok.lexeme), name_tok.line, name_tok.col});
+                }
+            } else {
+                error(peek(), "expected a library name after 'import'");
+                while (!is_at_end() && peek().type != TokenType::Semicolon && peek().type != TokenType::Newline) {
+                    advance();
+                }
+                if (match(TokenType::Semicolon) || match(TokenType::Newline)) {}
+            }
+            continue;
+        }
+
         if (auto stmt = statement()) {
+            has_statement = true;
             program.statements.push_back(std::move(stmt));
         } else {
             synchronize();
@@ -42,6 +79,10 @@ bool Parser::consume_terminator(const std::string& message) {
 }
 
 std::unique_ptr<Stmt> Parser::statement() {
+    if (check(TokenType::Import)) {
+        error(advance(), "imports must appear at the top of the program");
+        return nullptr;
+    }
     if (check(TokenType::Fixed) || is_type_token(peek().type)) return declaration();
     if (match(TokenType::Show)) return show_stmt();
     if (match(TokenType::Check)) return check_stmt();
@@ -357,6 +398,18 @@ std::unique_ptr<Expr> Parser::primary() {
     }
     if (match(TokenType::Identifier)) {
         Token t = previous();
+        if (match(TokenType::LeftParen)) {
+            std::vector<std::unique_ptr<Expr>> args;
+            if (!check(TokenType::RightParen)) {
+                do {
+                    auto arg = expr();
+                    if (!arg) return nullptr;
+                    args.push_back(std::move(arg));
+                } while (match(TokenType::Comma));
+            }
+            consume(TokenType::RightParen, "Expected ')' after function arguments.");
+            return std::make_unique<CallExpr>(t.line, t.col, std::string(t.lexeme), std::move(args));
+        }
         return std::make_unique<VariableExpr>(t.line, t.col, std::string(t.lexeme));
     }
     if (match(TokenType::LeftParen)) {
@@ -432,6 +485,7 @@ void Parser::synchronize() {
             case TokenType::Letter:
             case TokenType::Boolean:
             case TokenType::List:
+            case TokenType::Import:
             case TokenType::Fixed:
             case TokenType::Show:
             case TokenType::Check:

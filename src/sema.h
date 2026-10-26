@@ -3,6 +3,7 @@
 #include "ast.h"
 #include "symbol_table.h"
 #include "types.h"
+#include "library_registry.h"
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -28,13 +29,14 @@ struct Diagnostic {
 
 class SemanticAnalyzer : public ExprVisitor, public StmtVisitor {
 public:
-    SemanticAnalyzer();
+    explicit SemanticAnalyzer(const LibraryRegistry& registry = LibraryRegistry::default_registry());
 
     bool analyze(const Program& program);
 
     const std::vector<Diagnostic>& get_diagnostics() const { return diagnostics_; }
     bool has_errors() const { return error_count_ > 0; }
     const SymbolTable& get_symbol_table() const { return symbols_; }
+    const std::vector<LibUse>& get_lib_uses() const { return lib_uses_; }
 
     // ExprVisitor
     void visit_number(const NumberLiteral& expr) override;
@@ -46,6 +48,7 @@ public:
     void visit_binary(const BinaryExpr& expr) override;
     void visit_grouping(const GroupingExpr& expr) override;
     void visit_input(const InputExpr& expr) override;
+    void visit_call(const CallExpr& expr) override;
 
     // StmtVisitor
     void visit_var_decl(const VarDecl& stmt) override;
@@ -59,6 +62,10 @@ public:
     void visit_skip(const SkipStmt& stmt) override;
 
 private:
+    const LibraryRegistry& registry_;
+    std::vector<LibUse> lib_uses_;
+    bool direct_show_arg_ = false;
+
     SymbolTable symbols_;
     std::vector<Diagnostic> diagnostics_;
     int error_count_ = 0;

@@ -1,0 +1,11 @@
+num x = 42;
+decimal pi = 3.14;
+boolean flag = true;
+letter ch = 'A';
+show("direct string literal without text library");
+show(x);
+show(pi);
+show(flag);
+show(ch);
+give 0;
+

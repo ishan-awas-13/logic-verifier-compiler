@@ -1,0 +1,6 @@
+# LV07: Step skips the loop exit
+num i = 0;
+until (i equals 5) {
+    show(i);
+    i = i + 2;
+}

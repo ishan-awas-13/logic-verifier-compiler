@@ -1,0 +1,6 @@
+# No false alarm: guarded division
+num n = input();
+check (n > 0) {
+    num r = 100 / n;
+    show(r);
+}

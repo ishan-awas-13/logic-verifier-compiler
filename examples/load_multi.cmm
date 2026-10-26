@@ -1,0 +1,5 @@
+import unknown_lib;
+
+word s = "missing text library";
+show(s);
+

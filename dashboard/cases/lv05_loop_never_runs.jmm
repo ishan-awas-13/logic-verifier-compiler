@@ -1,0 +1,6 @@
+# LV05: Loop body never runs
+num i = 10;
+until (i equals 10) {
+    show(i);
+    i++;
+}

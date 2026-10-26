@@ -1,0 +1,5 @@
+num c = 0;
+until (c equals 0) {
+    c = c + 1;
+}
+

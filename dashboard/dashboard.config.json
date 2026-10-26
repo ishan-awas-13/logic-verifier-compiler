@@ -1,0 +1,30 @@
+{
+  "languageName": "J--",
+  "fileExtension": ".jmm",
+  "compilerPath": "../build/c--.exe",
+  "timeoutMs": 10000,
+  "pipeline": [
+    { "id": "lexer", "label": "Lexer", "flags": ["--tokens"] },
+    { "id": "parser", "label": "Parser", "flags": ["--ast"] },
+    { "id": "semantic", "label": "Semantic", "flags": ["--sema"] },
+    { "id": "link", "label": "Load and Link", "flags": ["--link"] },
+    { "id": "logic", "label": "Logic Verifier", "flags": ["--verify"] },
+    { "id": "tac", "label": "TAC Gen", "flags": ["--tac"] },
+    { "id": "cfg", "label": "CFG", "flags": ["--cfg"] },
+    { "id": "optimizer", "label": "Optimizer", "flags": ["--opt", "--stats"] },
+    { "id": "run", "label": "Run", "flags": ["--run-tac"] }
+  ],
+  "quickModes": [
+    { "id": "verify", "label": "Verify", "flags": ["--verify"] },
+    { "id": "verify-strict", "label": "Verify (Strict)", "flags": ["--verify", "--strict"] },
+    { "id": "link-only", "label": "Link Map", "flags": ["--link"] },
+    { "id": "run", "label": "Run TAC", "flags": ["--run-tac"] },
+    { "id": "optcheck", "label": "Optimizer Equivalence", "flags": ["--optcheck"] },
+    { "id": "libs", "label": "Library Registry", "flags": ["--libs"] },
+    { "id": "ast", "label": "AST Tree", "flags": ["--ast"] },
+    { "id": "tokens", "label": "Tokens", "flags": ["--tokens"] },
+    { "id": "tac", "label": "TAC IR", "flags": ["--tac"] },
+    { "id": "cfg", "label": "CFG Blocks", "flags": ["--cfg"] }
+  ]
+}
+

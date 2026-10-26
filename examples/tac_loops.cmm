@@ -1,0 +1,16 @@
+num i = 0;
+until (i equals 5) {
+    i++;
+    check (i equals 2) {
+        skip;
+    }
+    num j = 0;
+    until (j equals 3) {
+        j++;
+        check (j equals 1) {
+            stop;
+        }
+    }
+}
+show(i);
+

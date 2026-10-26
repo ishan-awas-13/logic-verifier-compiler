@@ -1,0 +1,4 @@
+num x = 10;
+num y = 20;
+show(x);
+

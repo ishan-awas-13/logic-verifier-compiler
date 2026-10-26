@@ -1,0 +1,5 @@
+import text;
+
+word greeting = "hello";
+show(greeting);
+

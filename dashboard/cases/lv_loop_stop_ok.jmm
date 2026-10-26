@@ -1,0 +1,9 @@
+# No false alarm: loop with reachable stop
+num x = 0;
+until (false) {
+    x++;
+    check (x > 5) {
+        stop;
+    }
+}
+show(x);

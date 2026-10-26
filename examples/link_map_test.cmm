@@ -1,0 +1,8 @@
+import text;
+
+word s = "hello";
+num l = length(s);
+num m = maximum(10, 20);
+show(l);
+show(m);
+

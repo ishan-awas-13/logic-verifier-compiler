@@ -1,0 +1,6 @@
+# Demo: Load error - unknown library
+import banana;
+
+num x = 10;
+show(x);
+

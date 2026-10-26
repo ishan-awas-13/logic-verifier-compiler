@@ -1,0 +1,5 @@
+import banana;
+
+num x = 1;
+show(x);
+

@@ -1,0 +1,6 @@
+num x = 0;
+until (x equals 5) {
+    x++;
+}
+show(x);
+

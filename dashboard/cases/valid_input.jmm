@@ -1,0 +1,6 @@
+# Valid program: takes input and processes it safely
+import text;
+word name = input();
+num age;
+show(name);
+show(age);

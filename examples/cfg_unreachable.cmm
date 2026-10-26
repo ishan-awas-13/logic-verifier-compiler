@@ -1,0 +1,11 @@
+num x = 1;
+until (x equals 5) {
+    x++;
+    check (x equals 3) {
+        stop;
+        show("after stop");
+    }
+}
+give 0;
+show("after give");
+

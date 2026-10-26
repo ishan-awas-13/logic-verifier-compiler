@@ -1,0 +1,5 @@
+# LV14: Undefined function in library
+import text;
+word s = "test";
+num l = lengt(s);
+show(l);

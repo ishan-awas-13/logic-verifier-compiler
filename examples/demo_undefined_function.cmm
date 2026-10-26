@@ -1,0 +1,7 @@
+# Demo: Link error - misspelled library function call
+import text;
+
+word s = "test";
+num l = lengt(s);
+show(l);
+

@@ -1,0 +1,5 @@
+# LV10: Definite division by zero
+num a = 10;
+num b = 0;
+num c = a / b;
+show(c);

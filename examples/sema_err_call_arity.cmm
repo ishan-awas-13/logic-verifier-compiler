@@ -1,0 +1,6 @@
+import text;
+
+word s = "hello";
+num l = length(s, 10);
+show(l);
+

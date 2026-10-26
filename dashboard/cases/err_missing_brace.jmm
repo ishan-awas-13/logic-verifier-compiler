@@ -1,0 +1,3 @@
+# Syntax error: missing closing brace
+check (true) {
+    show(1);

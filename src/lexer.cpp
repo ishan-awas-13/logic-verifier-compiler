@@ -12,6 +12,7 @@ std::string to_string(TokenType type) {
         case TokenType::Letter: return "Letter";
         case TokenType::Boolean: return "Boolean";
         case TokenType::List: return "List";
+        case TokenType::Import: return "Import";
         case TokenType::Fixed: return "Fixed";
         case TokenType::Check: return "Check";
         case TokenType::Otherwise: return "Otherwise";
@@ -68,6 +69,7 @@ static const std::unordered_map<std::string_view, TokenType> keywords = {
     {"letter", TokenType::Letter},
     {"boolean", TokenType::Boolean},
     {"list", TokenType::List},
+    {"import", TokenType::Import},
     {"fixed", TokenType::Fixed},
     {"check", TokenType::Check},
     {"otherwise", TokenType::Otherwise},

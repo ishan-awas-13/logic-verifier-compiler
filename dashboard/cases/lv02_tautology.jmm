@@ -1,0 +1,7 @@
+# LV02: Always-true condition (tautology)
+num x = 5;
+check (x equals 5) {
+    show(1);
+} otherwise {
+    show(2);
+}

@@ -1,0 +1,5 @@
+num x = input();
+check (x equals x) {
+    show("a");
+}
+

@@ -6,6 +6,9 @@ namespace cmm {
 void AstPrinter::print(const Program& program) {
     std::cout << "Program\n";
     indent_level++;
+    for (const auto& imp : program.imports) {
+        print_line("Import " + imp.name);
+    }
     for (const auto& stmt : program.statements) {
         stmt->accept(*this);
     }
@@ -79,6 +82,15 @@ void AstPrinter::visit_grouping(const GroupingExpr& expr) {
 
 void AstPrinter::visit_input(const InputExpr&) {
     print_line("Input");
+}
+
+void AstPrinter::visit_call(const CallExpr& expr) {
+    print_line("Call " + expr.callee);
+    indent_level++;
+    for (const auto& arg : expr.args) {
+        arg->accept(*this);
+    }
+    indent_level--;
 }
 
 void AstPrinter::visit_var_decl(const VarDecl& stmt) {

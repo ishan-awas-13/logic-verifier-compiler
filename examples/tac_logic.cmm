@@ -1,0 +1,5 @@
+num d = 0;
+num a = 10;
+check (d notequals 0 and a / d > 1) {
+    show("big");
+}

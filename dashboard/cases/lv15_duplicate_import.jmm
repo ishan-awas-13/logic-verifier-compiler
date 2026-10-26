@@ -1,0 +1,5 @@
+# LV15: Duplicate import
+import text;
+import text;
+word w = "hello";
+show(w);

@@ -1,0 +1,3 @@
+num n = input();
+num r = 100 / n;
+show(r);

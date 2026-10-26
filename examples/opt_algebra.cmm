@@ -1,0 +1,4 @@
+num n = input();
+num r = (n + 0) * 1;
+show(r);
+

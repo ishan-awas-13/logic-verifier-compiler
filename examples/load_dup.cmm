@@ -1,0 +1,6 @@
+import text;
+import text;
+
+word s = "duplicate import test";
+show(s);
+

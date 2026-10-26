@@ -1,0 +1,6 @@
+import text;
+
+num x = 5;
+num l = length(x);
+show(l);
+

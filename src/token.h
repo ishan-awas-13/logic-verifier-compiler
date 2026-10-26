@@ -8,27 +8,30 @@ enum class TokenType {
     // Data Types
     Num,
     Decimal,
-    Word,
-    Letter,
+    Word,         //string
+    Letter,       //char
     Boolean,
-    List,
+    List,         //arr/vector
+
+    // Imports
+    Import,
 
     // Modifiers
     Fixed,
 
     // Control Flow
-    Check,
-    Otherwise,
-    Until,
-    Foreach,
-    DoUntil,
-    Stop,
-    Skip,
+    Check,        //if
+    Otherwise,    //else
+    Until,        //while
+    Foreach,      //for
+    DoUntil,      //do while
+    Stop,         //break
+    Skip,         //continue
 
     // IO / Functions
-    Show,
-    Input,
-    Give,
+    Show,         //printf
+    Input,        //scanf
+    Give,         //return
 
     // Boolean Literals
     True,

@@ -1,0 +1,14 @@
+digraph CFG {
+  node [shape=box, fontname="Courier"];
+  edge [fontname="Courier"];
+
+  B0 [label="B0\l  countdown = 5\l  LIFTOFF = 0\l  show \"Initiating launch sequence...\"\l"];
+  B1 [label="B1 [L1]\l  t1 = countdown == LIFTOFF\l  if_true t1 goto L2\l"];
+  B2 [label="B2\l  show countdown\l  countdown = countdown - 1\l  goto L1\l"];
+  B3 [label="B3 [L2]\l  show \"Liftoff!\"\l  halt\l"];
+
+  B0 -> B1;
+  B1 -> B2 [label="false"];
+  B1 -> B3 [label="true"];
+  B2 -> B1;
+}

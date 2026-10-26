@@ -1,0 +1,5 @@
+# LV04: Redundant condition part
+num x = input();
+check (x > 10 and x > 5) {
+    show(1);
+}

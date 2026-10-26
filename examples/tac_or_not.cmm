@@ -1,0 +1,10 @@
+boolean a = true;
+boolean b = false;
+boolean c = not a;
+check (a or b) {
+    show("or passed");
+}
+check ((a or b) and not c) {
+    show("complex passed");
+}
+

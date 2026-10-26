@@ -1,0 +1,4 @@
+list items;
+num count = 0;
+show(count);
+

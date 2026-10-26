@@ -19,6 +19,7 @@ public:
     void visit_binary(const BinaryExpr& expr) override;
     void visit_grouping(const GroupingExpr& expr) override;
     void visit_input(const InputExpr& expr) override;
+    void visit_call(const CallExpr& expr) override;
 
     void visit_var_decl(const VarDecl& stmt) override;
     void visit_assign(const AssignStmt& stmt) override;

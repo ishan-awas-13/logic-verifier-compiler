@@ -1,0 +1,4 @@
+# Semantic error: type mismatch
+import text;
+num age = "twenty";
+show(age);

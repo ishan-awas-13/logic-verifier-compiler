@@ -1,0 +1,4 @@
+num a = 10;
+num r = a / 0;
+show(r);
+

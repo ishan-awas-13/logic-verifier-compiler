@@ -1,0 +1,7 @@
+import text;
+
+word name = input();
+num age;
+show(name);
+show(age);
+

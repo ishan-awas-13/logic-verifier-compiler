@@ -1,0 +1,6 @@
+check (true) {
+    show("yes");
+} otherwise {
+    show("no");
+}
+
