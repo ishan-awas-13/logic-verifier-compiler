@@ -63,7 +63,7 @@ This phenomenon is known as the **Optimizer Paradox**: *The smarter the optimize
 J-- fundamentally solves this by enforcing an architectural invariant:
 
 $$
-\text{Source Code} \longrightarrow \text{Load/Link Quarantine} \longrightarrow \text{CFG & Logic Verification} \longrightarrow \text{Optimization} \longrightarrow \text{Execution}
+\text{Source Code} \longrightarrow \text{Load/Link Quarantine} \longrightarrow \text{CFG \\& Logic Verification} \longrightarrow \text{Optimization} \longrightarrow \text{Execution}
 $$
 
 1. **Gate 1 (Stage 4 Quarantine):** Unresolved modules, unimported library symbols, or typoed library identifiers trigger an immediate quarantine halt before Three-Address Code (TAC) can ever be emitted.
