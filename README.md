@@ -100,16 +100,16 @@ flowchart TD
     %% Stage 3: Semantic Analyzer
     subgraph STAGE_3 ["Stage 3: Semantic Analyzer (src/sema.cpp)"]
         SEMA["Scope Resolution<br/>Type Checking & Immutability<br/>Populate Symbol Table"]
-        LIBUSE_REC[("Side-Table: LibUse<br/>(Symbol, Kind, Provider, Pos)")]:::sideTable
+        LIBUSE_REC["Side-Table: LibUse<br/>(Symbol, Kind, Provider, Pos)"]:::sideTable
     end
 
-    PARSE -->|Abstract Syntax Tree (AST)| SEMA
+    PARSE -->|Abstract Syntax Tree AST| SEMA
     SEMA -.->|Record Features| LIBUSE_REC
     SEMA -->|Semantic Error| ERR_SEMA["❌ Halt Exit 1<br/>(Type Mismatch / Undeclared Var)"]:::errStyle
 
     %% Stage 4: Load & Link Verifier
     subgraph STAGE_4 ["Stage 4: Load & Link Verifier (src/link_check.cpp)"]
-        REG[("Library Registry<br/>text | math | vector")]:::sideTable
+        REG["Library Registry<br/>text / math / vector"]:::sideTable
         LOAD_PASS["1. LOAD Pass: Check Imports vs Registry<br/>(Detect LV13 Unknown, LV15 Duplicate)"]
         LINK_PASS["2. LINK Pass: Check LibUse vs Loaded Libs<br/>(Detect LV12 Unimported, LV16 Unused)"]
         FUZZY["3. Levenshtein Typo Matcher<br/>(D ≤ 2 Suggestion for LV14)"]
@@ -139,7 +139,7 @@ flowchart TD
     %% Stage 7: Logic Verifier
     subgraph STAGE_7 ["Stage 7: Logic Verifier (src/verifier.cpp)"]
         INTERVAL["Interval Abstract Domain D_int<br/>[lo, hi] Bounds Lattice"]
-        EDGE_REF["Path-Sensitive Edge Refinement<br/>True: σ ⊓ cond | False: σ ⊓ ¬cond"]
+        EDGE_REF["Path-Sensitive Edge Refinement<br/>True: σ ⊓ cond; False: σ ⊓ ¬cond"]
         FIXED_PT["Chaotic Loop Fixed-Point Iteration<br/>Widening (∇) & Narrowing (Δ)"]
         FLAW_DET["Flaw Detection & Proof Generator<br/>(LV01-LV04 Condition, LV05-LV09 Loops, LV10-LV11 Div-0)"]
     end
@@ -162,7 +162,7 @@ flowchart TD
     end
 
     OPT -->|Optimized Canonical TAC| VM
-    STDIN[("⌨️ stdin Inputs")]:::inputStyle -.-> VM
+    STDIN["⌨️ stdin Inputs"]:::inputStyle -.-> VM
     VM --> OUT(["🖥️ Program Execution Output (stdout)<br/>Exit Code 0"]):::outputStyle
 
     %% Node Styles
