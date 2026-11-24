@@ -1,4 +1,4 @@
-# ⚡ J-- (JMM): A Modern Statically-Typed Programming Language & Provably-Verified Compiler
+# ⚡ J-- (JMM) Logic Verifier Compiler
 
 [![Language: J--](https://img.shields.io/badge/Language-J----0052CC?style=for-the-badge&logo=codeigniter&logoColor=white)](https://github.com)
 [![Standard: C++20](https://img.shields.io/badge/Standard-C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://en.cppreference.com/w/cpp/20)
